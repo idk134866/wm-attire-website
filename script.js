@@ -175,3 +175,22 @@ if (generateAvatarBtn) {
 
 window.wmAttire = { storage: wmStorage, ai: aiFitEngine };
 console.log('WM Attire AI Ready!');
+
+// Get Started Button - Create Profile
+const getStartedBtns = document.querySelectorAll('.btn-primary');
+getStartedBtns.forEach(btn => {
+    if (btn.textContent.includes('Get Started')) {
+        btn.addEventListener('click', () => {
+            const firstName = prompt('Enter your first name to get started:');
+            if (firstName) {
+                wmStorage.createProfile({
+                    firstName: firstName,
+                    email: `${firstName.toLowerCase()}@example.com`,
+                    gender: 'unisex'
+                });
+                alert(`Welcome to WM Attire, ${firstName}!\n\nYou can now create your 3D avatar and try on clothes virtually.`);
+                location.reload();
+            }
+        });
+    }
+});
