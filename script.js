@@ -132,3 +132,46 @@ document.head.appendChild(style);
 console.log('%cWM Attire', 'font-size: 24px; font-weight: bold; color: #8B7AB8;');
 console.log('%cSee how it fits before you buy', 'font-size: 14px; color: #6a6a6a;');
 console.log('\nBuilt with care for students and fashion enthusiasts.');
+
+// AI Fit Engine & Storage Integration
+// Initialize AI and Storage when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Initializing WM Attire AI & Storage...');
+    
+    const hasProfile = wmStorage.hasProfile();
+    if (hasProfile) {
+        const profile = wmStorage.getProfile();
+        console.log('Welcome back!', profile.firstName);
+    }
+});
+
+// Demo Avatar Generation
+const generateAvatarBtn = document.querySelector('.demo-controls button');
+if (generateAvatarBtn) {
+    generateAvatarBtn.addEventListener('click', () => {
+        const heightSlider = document.querySelector('.demo-controls input[type="range"]');
+        const buildSlider = document.querySelectorAll('.demo-controls input[type="range"]')[1];
+        
+        if (heightSlider && buildSlider) {
+            const height = parseInt(heightSlider.value);
+            const build = parseInt(buildSlider.value);
+            
+            const measurements = {
+                height: height,
+                chest: 85 + (build * 3),
+                waist: 70 + (build * 2.5),
+                hips: 90 + (build * 2),
+                weight: 50 + (build * 7),
+                shoulders: 40 + (build * 1.5)
+            };
+            
+            wmStorage.saveMeasurements(measurements);
+            const recommendation = aiFitEngine.recommendSize('shirt', measurements, 'Zara');
+            
+            alert(`Avatar Generated!\n\nMeasurements: ${height}cm height, ${measurements.chest}cm chest\nRecommended Size: ${recommendation.size}\nConfidence: ${recommendation.confidence}%`);
+        }
+    });
+}
+
+window.wmAttire = { storage: wmStorage, ai: aiFitEngine };
+console.log('WM Attire AI Ready!');
